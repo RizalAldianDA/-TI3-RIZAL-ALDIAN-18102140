@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dom Nodes</title>
+</head>
+<body>
+<!--Creating New HTML Element -->
+<label>Creating New HTML Element</label>
+<div id="div1">
+<p id="p1">This is a paragraph.</p>
+<p id="p2">This is another paragraph.</p>
+</div>
+<br>
+
+<!--Removing Existing HTML -->
+<label>Removing Existing HTML</label>
+<div>
+  <p id="p3">This is a paragraph.</p>
+  <p id="p4">This is another paragraph.</p>
+</div>
+<br>
+
+<div>
+  <p id="p5">This is a paragraph.</p>
+  <p id="p6">This is another paragraph.</p>
+</div>
+<button onclick="myFunction()">Remove Element</button>
+<br>
+<br>
+
+<!--Removing Child Node -->
+<label>Removing Child Node</label>
+<div id="div2">
+<p id="p7">This is a paragraph.</p>
+<p id="p8">This is another paragraph.</p>
+</div>
+<br>
+
+<!--Replacing HTML Element-->
+<label>Replacing HTML Element</label>
+<div id="div3">
+<p id="p9">This is a paragraph.</p>
+<p id="p10">This is another paragraph.</p>
+</div>
+<br>
+
+<script>
+var para = document.createElement("p");
+var node = document.createTextNode("This is new.");
+para.appendChild(node);
+var element = document.getElementById("div1");
+var child = document.getElementById("p1");
+element.appendChild(para,child);
+
+var elmnt = document.getElementById("p3");
+elmnt.remove();
+
+function myFunction() {
+  var elmnt = document.getElementById("p5");
+  elmnt.remove();
+}
+
+var parent = document.getElementById("div2");
+var child = document.getElementById("p7");
+parent.removeChild(child);
+
+var parent = document.getElementById("div3");
+var child = document.getElementById("p9");
+var para = document.createElement("p");
+var node = document.createTextNode("This is new.");
+para.appendChild(node);
+parent.replaceChild(para,child);
+</script>
+
+</body>
+</html>

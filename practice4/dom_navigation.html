@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DOM Navigation</title>
+</head>
+<body>
+	<h1 id="id01">My First Page</h1>
+	<p id="id02"></p>
+	<p>Hello World!</p>
+	<div>
+	<p>The DOM is very useful!</p>
+	<p>This example demonstrates the <b>document.documentElement</b> property.</p>
+	</div>
+	<h1 id="id03">My First Page</h1>
+	<p id="id04"></p>
+	<h1 id="id05">My First Page</h1>
+	<p id="id06"></p>
+
+	<script>
+	document.getElementById("id02").innerHTML = document.getElementById("id01").innerHTML;
+	alert(document.documentElement.innerHTML);
+	document.getElementById("id04").innerHTML = document.getElementById("id03").nodeName;
+	document.getElementById("id06").innerHTML = document.getElementById("id05").nodeType;
+	</script>
+</body>
+</html>
