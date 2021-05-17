@@ -60,58 +60,23 @@
 				 <div class="album py-5 bg-light">
 				 <div class="container">
 					 <h1 class="jumbotron-heading" id="title-page"></h1>
-						 <div class="row">
-							 <div class="col-md-4">
+						 <div class="row" id="quote-items">
+							 <div class="col-md-4 quote-item" style="display: none;" id="quote-item">
 								 <div class="card mb-4 box-shadow">
-									 <img class="card-img-top" src="assets/img/pic.jpg" alt="Card image cap">
+									 <img class="card-img-top" id="card-img" src="assets/img/pic.jpg" alt="Card image cap">
 									 <div class="card-body">
-									 <p class="card-text">This is a wider card with supporting text below as a natural leadin to additional content. This content is a little bit longer.</p>
+									 <b class="card-title" id="card-title">Title</b><br>
+									 <small class="text-muted" id="card-name">Nama</small>
+									 <p class="card-text" id="card-description">This is a wider card with supporting text below as a natural leadin to additional content. This content is a little bit longer.</p>
 										 <div class="d-flex justify-content-between align-items-center">
 											 <div class="btn-group">
-												 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												 <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+												 <button type="button" id="view-detail" class="btn btn-sm btn-outline-secondary">View</button>
 											 </div>
-											 <small class="text-muted">9 mins</small>
+											 <small class="text-muted" id="card-date">9 mins</small>
 										</div>
 									</div>
 								</div>
 							 </div>
-
-							  <div class="col-md-4">
-								 <div class="card mb-4 box-shadow">
-									 <img class="card-img-top" src="assets/img/pic.jpg" alt="Card image cap">
-									 <div class="card-body">
-									 <p class="card-text">This is a wider card with supporting text below as a natural leadin to additional content. This content is a little bit longer.</p>
-										 <div class="d-flex justify-content-between align-items-center">
-											 <div class="btn-group">
-												 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												 <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											 </div>
-											 <small class="text-muted">9 mins</small>
-										</div>
-									</div>
-								</div>
-							 </div>
-
-							  <div class="col-md-4">
-								 <div class="card mb-4 box-shadow">
-									 <img class="card-img-top" src="assets/img/pic.jpg" alt="Card image cap">
-									 <div class="card-body">
-									 <p class="card-text">This is a wider card with supporting text below as a natural leadin to additional content. This content is a little bit longer.</p>
-										 <div class="d-flex justify-content-between align-items-center">
-											 <div class="btn-group">
-												 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-												 <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-											 </div>
-											 <small class="text-muted">9 mins</small>
-										</div>
-									</div>
-								</div>
-							 </div>
-
-							  
-
-
 						 </div>
 					 </div>
 				 </div>
@@ -128,5 +93,39 @@
 
 		<script src="../node_modules/jquery/dist/jquery.min.js" crossorigin="anonymous"></script>
  		<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+ 		<script>
+ 			function getQuotes(){
+				 var url = "https://quotesbeta.informatika.app/index.php/quotes";
+				 $.ajax({
+					 type: 'GET',
+					 url: url,
+					 beforeSend: function( xhr ) {
+						 xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+				 	 },
+					 error: function(xhr, status, error) {
+						 console.log(xhr);
+					 }
+					 })
+					 .done(function(data) {
+					 	//console.log(data);
+					 	myData = JSON.parse(data);
+							for (i = 0; i < myData['quotes'].length; i++) {
+							var item = $( "#quote-item" ).clone();
+							item.find('#card-description').html(myData['quotes'][i].description);
+							item.removeAttr( "style" );
+							item.find('#card-img').attr('src', myData['quotes'][i].images);
+							item.find('#card-title').html(myData['quotes'][i].title);
+							item.find('#card-name').html(myData['quotes'][i].name + " (" + myData['quotes'][i].class + ")");
+							item.find('#card-date').html(myData['quotes'][i].updated);
+							item.find('#viewdetail').attr("onClick","callModal('"+myData['quotes'][i].title+"','"+myData['quotes'][i].name+ " (" + myData['quotes'][
+							i].class + ")','"+myData['quotes'][i].images+"','"+myData['quotes'][i].description+"')");
+							item.appendTo("#quote-items");
+					}
+				 });
+			} 
+			$(document).ready(function(){
+			getQuotes();
+			}) 
+ 		</script>
 	 </body>
 </html>
