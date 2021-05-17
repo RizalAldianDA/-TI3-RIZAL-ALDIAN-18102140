@@ -51,7 +51,9 @@
 				 <h1 class="jumbotron-heading">Album example</h1>
 				 <p class="lead text-muted">Something short and leading about the collection below—
 				 its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p>
+
 				 <p>
+				 <a href="#" class="btn btn-success my-2" onClick = "callInputModal('Add Quote')">Add Quote</a>
 				 <a href="#" class="btn btn-primary my2" onClick = "getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/18102140','My Quotes')">My Quotes</a>
 				 <a href="#" class="btn btn-primary my2" onClick = "getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/class_id/7','Class Quotes')">Class Quotes</a>
 				 <a href="#" class="btn btn-primary my2" onClick = "getQuotes('https://quotesbeta.informatika.app/index.php/quotes','All Quotes')">All Quotes</a>
@@ -91,7 +93,55 @@
 			 <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../gettingstarted/">getting started guide</a>.</p>
 			 </div>
  		</footer>
- 		<!-- Modal -->
+ 		<!-- Modal TAMBAH DATA -->
+		 <div class="modal fade" id="quoteInputModal" tabindex="-1" role="dialog" arialabelledby="quoteInputModal" aria-hidden="true">
+			 	<div class="modal-dialog modal-lg" role="document">
+					 <div class="modal-content">
+					 <div class="modal-header">
+						 <h5 class="modal-title" id="modal-input-title">Modal title</h5>
+						 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						 <span aria-hidden="true">&times;</span>
+						 </button>
+					 </div>
+					 <div class="modal-body">
+						 <form id="modal-input-form" enctype="multipart/form-data">
+						 <input type="hidden" class="form-control" id="modal-input-form-quote-id" name="quote_id">
+						 <input type="hidden" class="form-control" id="modal-input-form-student-id" name="student_id">
+						 <div class="form-group row">
+							 <label class="col-sm-2 col-form-label">Title</label>
+							 <div class="col-sm-10">
+							 <input type="text" class="form-control" id="modal-input-formtitle" placeholder="Title.." name="title" required>
+						 </div>
+						 </div>
+						 <div class="form-group row">
+							 <label class="col-sm-2 col-form-label">Description</label>
+							 <div class="col-sm-10">
+								<textarea class="form-control" id="modal-input-formdescription" rows="5" placeholder="Description..." name="description" required></textarea>
+							 </div>
+						 </div>
+						 <div class="form-group row">
+							 <label class="col-sm-2 col-form-label">Image</label>
+							 <div class="col-sm-10">
+								 <input type="file" name="imagename" class="form-control-file" id="modal-input-form-image">
+							 </div>
+						 </div>
+						 <div class="form-group row">
+							 <label class="col-sm-2 col-form-label"></label>
+							 <div class="col-sm-10">
+							 <img class="card-img-top" id="modal-input-show-img">
+							</div>
+					 	</div>
+					 	</div>
+						<div class="modal-footer">
+							 <button type="submit" id="modal-input-form-submit" class="btn btn-primary">Save</button>
+							 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						 
+						</div>
+					 	</form>
+					 </div>
+				 </div>
+		 </div>
+ 		<!-- Modal TAMPIL DATA -->
 		 <div class="modal fade" id="quoteDetailModal" tabindex="-1" role="dialog" arialabelledby="quoteDetailLabel" aria-hidden="true">
 			 <div class="modal-dialog" role="document">
 				 <div class="modal-content">
@@ -117,8 +167,11 @@
 		<script src="../node_modules/jquery/dist/jquery.min.js" crossorigin="anonymous"></script>
  		<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
  		<script>
- 			
+ 			$("#modal-input-form-image").change(function() {
+				 readURL(this);
+			});
  			function getQuotes(url,title){
+ 				 $.ajaxSetup({ cache: false });
 				 //var url = "https://quotesbeta.informatika.app/index.php/quotes";
 				 var item = $( "#quote-item" );
 				 $("#title-page").html(title);
@@ -152,7 +205,20 @@
 				 });
 			}$(document).ready(function(){
 			getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/18102140','My Quotes');
+			$('#modal-input-form').submit(function (e) {
+				 e.preventDefault();
+			 	var formData = $(this).serializeArray();
+					if(formData[0].value==""){
+					 	insertQuote(this);
+					}
+					else{
+					 	updateQuote(this);
+					}
+				});
 			})
+			sessionStorage.setItem("student_id", "589");
+ 			sessionStorage.setItem("nim", "18102140");
+ 			getQuotes(' https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
 			function callModal(title,name,image,description){
 				 $('#quoteDetailModal').modal('show');
 				 $( "#modal-title" ).html(title);
@@ -160,6 +226,46 @@
 				 $( "#modal-description" ).html(description);
 				 $( "#modal-img" ).attr('src',image);
  			}  
+ 			function callInputModal(title,name="",description="",image="",quote_id=""){
+				 $('#quoteInputModal').modal('show');
+				 $( "#modal-input-title" ).html(title);
+				 $( "#modal-input-form-quote-id" ).val(quote_id);
+				 $( "#modal-input-form-student-id" ).val(sessionStorage.getItem("student_id"));
+				 $( "#modal-input-form-title" ).val(name);
+				 $( "#modal-input-form-image" ).val('');
+				 $( "#modal-input-form-description" ).val(description);
+				 $( "#modal-input-show-img" ).attr('src',image);
+			}
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+					reader.onload = function(e) {
+					$('#modal-input-show-img').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);
+				}
+			}
+			function insertQuote(data){
+				$.ajax({
+					type: 'POST',
+					url: " https://quotesbeta.informatika.app/index.php/quotes",
+					dataType: "JSON",
+					data: new FormData(data),
+					processData: false,
+					contentType: false,
+					beforeSend: function( xhr ) {
+					xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+				},
+					error: function(xhr, status, error) {
+				 		console.log(xhr);
+					}
+				})
+				.done(function( data ) {
+				console.log(data);
+				getQuotes(' https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
+				$('#quoteInputModal').modal('toggle');
+			}); 
+
  		</script>
 	 </body>
 </html>
