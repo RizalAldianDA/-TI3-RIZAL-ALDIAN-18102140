@@ -74,6 +74,8 @@
 										 <div class="d-flex justify-content-between align-items-center">
 											 <div class="btn-group">
 												 <button type="button" id="viewdetail" class="btn btn-sm btn-outline-secondary">View</button>
+												 <button type="button" id="edit-detail" class="btn btn-sm btn-outline-primary">Edit</button>
+												 <button type="button" id="delete-quote" class="btn btn-sm btn-outline-danger">Delete</button>
 											 </div>
 											 <small class="text-muted" id="card-date">9 mins</small>
 										</div>
@@ -110,13 +112,13 @@
 						 <div class="form-group row">
 							 <label class="col-sm-2 col-form-label">Title</label>
 							 <div class="col-sm-10">
-							 <input type="text" class="form-control" id="modal-input-formtitle" placeholder="Title.." name="title" required>
+							 <input type="text" class="form-control" id="modal-input-form-title" placeholder="Title.." name="title" required>
 						 </div>
 						 </div>
 						 <div class="form-group row">
 							 <label class="col-sm-2 col-form-label">Description</label>
 							 <div class="col-sm-10">
-								<textarea class="form-control" id="modal-input-formdescription" rows="5" placeholder="Description..." name="description" required></textarea>
+								<textarea class="form-control" id="modal-input-form-description" rows="5" placeholder="Description..." name="description" required></textarea>
 							 </div>
 						 </div>
 						 <div class="form-group row">
@@ -167,6 +169,70 @@
 		<script src="../node_modules/jquery/dist/jquery.min.js" crossorigin="anonymous"></script>
  		<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
  		<script>
+ 			 function deleteQuote(quote_id,title){
+				 var r = confirm("Delete "+title+"?");
+					 if (r == true) {
+						 $.ajax({
+							 type: 'DELETE',
+							 url: "https://quotesbeta.informatika.app/index.php/quotes/q/quote_id/"+quote_id,
+						 beforeSend: function( xhr ) {
+						 	xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+						 },
+						 error: function(xhr, status, error) {
+						 	console.log(xhr);
+						 }
+					 })
+						 .done(function( data ) {
+						 console.log(data);
+						 getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
+						 });
+					} 
+			};
+
+	 		function updateQuote(data){
+				 console.log(data);
+				 $.ajax({
+					 type: 'POST',
+					 url: "https://quotesbeta.informatika.app/index.php/quotes/q/edit/1",
+					 dataType: "JSON",
+					 data: new FormData(data),
+					 processData: false,
+					 contentType: false,
+					 beforeSend: function( xhr ) {
+					 	xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+					 },
+					 error: function(xhr, status, error) {
+					 	console.log(xhr);
+					 }
+				 })
+				 .done(function( data ) {
+					 console.log(data);
+					 getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
+					 $('#quoteInputModal').modal('toggle');
+				 });
+			}; 
+ 			function insertQuote(data){
+				 $.ajax({
+					 type: 'POST',
+					 url: " https://quotesbeta.informatika.app/index.php/quotes",
+					 dataType: "JSON",
+					 data: new FormData(data),
+					 processData: false,
+					 contentType: false,
+					 beforeSend: function( xhr ) {
+					 	xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+					 },
+					 error: function(xhr, status, error) {
+						 console.log(xhr);
+					 }
+				 })
+				 .done(function( data ) {
+					 console.log(data);
+					 getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
+					 $('#quoteInputModal').modal('toggle');
+				 });
+			};
+
  			$("#modal-input-form-image").change(function() {
 				 readURL(this);
 			});
@@ -200,10 +266,22 @@
 							item.find('#card-date').html(myData['quotes'][i].updated);
 							item.find('#viewdetail').attr("onClick","callModal('"+myData['quotes'][i].title+"','"+myData['quotes'][i].name+ " (" + myData['quotes'][
 							i].class + ")','"+myData['quotes'][i].images+"','"+myData['quotes'][i].description+"')");
+							item.find('#edit-detail').attr("onClick","callInputModal(\"Edit Quote\",\""+myData['quotes'][i].title+"\",\""+myData['quotes'][i].description.
+							replace('"','\\"').replace(/(\r\n|\n|\r)/gm,'<br>')+"\",\""+myData['quotes'][i].images+"\",\""+myData['quotes'][i].quote_id
+							+"\")");
+							item.find('#delete-quote').attr("onClick","deleteQuote("+myData['quotes'][i].quote_id+",'"+myData['quotes'][i].title+"')");
+							 
+							if(sessionStorage.getItem("student_id")!=myData['quotes'][i].student_id){
+								item.find('#edit-detail').attr("style","display: none;");
+								item.find('#delete-quote').attr("style","display: none;");
+							}
 							item.appendTo("#quote-items");
 					}
 				 });
 			}$(document).ready(function(){
+			sessionStorage.setItem("student_id", "589");
+			sessionStorage.setItem("nim", "18102140");
+			getQuotes(' https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
 			getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/18102140','My Quotes');
 			$('#modal-input-form').submit(function (e) {
 				 e.preventDefault();
@@ -216,9 +294,6 @@
 					}
 				});
 			})
-			sessionStorage.setItem("student_id", "589");
- 			sessionStorage.setItem("nim", "18102140");
- 			getQuotes(' https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
 			function callModal(title,name,image,description){
 				 $('#quoteDetailModal').modal('show');
 				 $( "#modal-title" ).html(title);
@@ -245,26 +320,7 @@
 				reader.readAsDataURL(input.files[0]);
 				}
 			}
-			function insertQuote(data){
-				$.ajax({
-					type: 'POST',
-					url: " https://quotesbeta.informatika.app/index.php/quotes",
-					dataType: "JSON",
-					data: new FormData(data),
-					processData: false,
-					contentType: false,
-					beforeSend: function( xhr ) {
-					xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-				},
-					error: function(xhr, status, error) {
-				 		console.log(xhr);
-					}
-				})
-				.done(function( data ) {
-				console.log(data);
-				getQuotes(' https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/'+sessionStorage.getItem("nim"),'My Quotes');
-				$('#quoteInputModal').modal('toggle');
-			}); 
+			 
 
  		</script>
 	 </body>
