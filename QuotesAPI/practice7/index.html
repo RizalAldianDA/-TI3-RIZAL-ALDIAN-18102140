@@ -52,8 +52,9 @@
 				 <p class="lead text-muted">Something short and leading about the collection below—
 				 its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p>
 				 <p>
-				 <a href="#" class="btn btn-primary my-2">Main call to action</a>
-				 <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+				 <a href="#" class="btn btn-primary my2" onClick = "getQuotes('quotesbeta.informatika.app/index.php/quotes/q/my_quote/18102140','My Quotes')">My Quotes</a>
+				 <a href="#" class="btn btn-primary my2" onClick = "getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/class_id/7','Class Quotes')">Class Quotes</a>
+				 <a href="#" class="btn btn-primary my2" onClick = "getQuotes('https://quotesbeta.informatika.app/index.php/quotes','All Quotes')">All Quotes</a>
 				 </p>
 				 </div>
 				 </section>
@@ -94,8 +95,12 @@
 		<script src="../node_modules/jquery/dist/jquery.min.js" crossorigin="anonymous"></script>
  		<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
  		<script>
- 			function getQuotes(){
-				 var url = "https://quotesbeta.informatika.app/index.php/quotes";
+ 			function getQuotes(url,title){
+				 //var url = "https://quotesbeta.informatika.app/index.php/quotes";
+				 var item = $( "#quote-item" );
+				 $("#title-page").html(title);
+				 $( ".quote-item" ).remove();
+				 item.appendTo("#quote-items");
 				 $.ajax({
 					 type: 'GET',
 					 url: url,
@@ -124,7 +129,7 @@
 				 });
 			} 
 			$(document).ready(function(){
-			getQuotes();
+			getQuotes('https://quotesbeta.informatika.app/index.php/quotes/q/my_quote/18102140','My Quotes');
 			}) 
  		</script>
 	 </body>
