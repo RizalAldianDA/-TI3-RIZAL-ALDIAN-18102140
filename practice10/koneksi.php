@@ -1,8 +1,8 @@
 <?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$dbname = "db_practice9";
+	 $servername = "localhost";
+	 $username = "kelasti2_prak9";
+	 $password = "pusingsekali";
+	 $dbname = "kelasti2_practice9_18102140";
 
 
 	 // Create connection
