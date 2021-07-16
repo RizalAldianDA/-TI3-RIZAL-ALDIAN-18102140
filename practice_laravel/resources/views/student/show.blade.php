@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
         <title>Biodata {{$student->name}}</title>
     </head>
     <body>
@@ -28,16 +28,23 @@
                         {{ session()->get('pesan') }}
                     </div>
                     @endif
-                    <ul>
-                    <li>NIM: {{$student->nim}} </li>
-                    <li>Nama: {{$student->name}} </li>
-                    <li>Jenis Kelamin:
-                    {{$student->gender == 'P' ? 'Perempuan' : 'Laki-laki'}}
-                    </li>
-                    <li>Jurusan: {{$student->departement}} </li>
-                    <li>Alamat:
-                    {{$student->address == '' ? 'N/A' : $student->address}}
-                    </li>
+                    <ul>                        
+                        <img height="100px" src="../../{{$student->image}}" class="rounded" alt="">
+                        <li>
+                            NIM: {{$student->nim}} 
+                        </li>
+                        <li>
+                            Nama: {{$student->name}} 
+                        </li>
+                        <li>
+                            Jenis Kelamin: {{$student->gender == 'P' ? 'Perempuan' : 'Laki-laki'}}
+                        </li>
+                        <li>
+                            Jurusan: {{$student->departement}} 
+                        </li>
+                        <li>
+                            Alamat: {{$student->address == '' ? 'N/A' : $student->address}}
+                        </li>
                     </ul>
                 </div>
             </div>
