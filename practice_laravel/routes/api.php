@@ -22,6 +22,6 @@ Route::post('student', 'StudentApiController@store');
 
 Route::get('student', 'StudentApiController@index');
 
-Route::post('student/{id}', 'StudentApiController@update');
+Route::put('student/{id}', 'StudentApiController@update');
 
 Route::delete('student/{id}', 'StudentApiController@destroy');
