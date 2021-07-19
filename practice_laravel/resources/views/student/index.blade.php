@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Data Mahasiswa</title>
 </head>
 <body>
@@ -38,7 +38,7 @@
                     @forelse ($students as $mahasiswa)
                     <tr>
                     <th>{{$loop->iteration}}</th>
-                    <td><img height="30px" src="../{{$mahasiswa->image}}" class="rounded" alt=""></td>
+                    <td><img height="30px" src="{{ url('') }}/{{$mahasiswa->image}}" class="rounded" alt=""></td>
                     <td><a href="{{ route('student.show',['student' => $mahasiswa->id]) }}">{{$mahasiswa->nim}}</a></td>
                     <td>{{$mahasiswa->name}}</td>
                     <td>{{$mahasiswa->gender == 'P'?'Perempuan':'Laki-laki'}}</td>
